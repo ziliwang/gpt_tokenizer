@@ -275,12 +275,10 @@ void Encoder::load_vocab(const std::string &vocab_file){
     for(auto item: vocab_){
         vocab.insert({item.first, item.second});
     }
-    std::cout << "finished" << std::endl;
 };
 void Encoder::load_merge(const std::string &merge_file){
     //c++中，char, string 都是ANSI字符
     bpe_ranks.reserve(60000);
-    std::cout << bpe_ranks.max_size() << std::endl;
     std::ifstream file_handle(merge_file);
     assert(file_handle.good() && "file not exists");
     std::string line;
@@ -291,10 +289,8 @@ void Encoder::load_merge(const std::string &merge_file){
         assert(bigrams.size()==2 && "unk format");
         wbigram_pair curr(utf8_to_wstring(bigrams[0]), utf8_to_wstring(bigrams[1]));
         bpe_ranks.insert({curr, curr_idx});
-        // std::cout << bpe_ranks.size() << std::endl;
         curr_idx++;
     }
-    std::cout << "merges finished" << std::endl;
 };
 std::vector<std::string> Encoder::bpe(std::wstring token){
     // bpe use wstring
@@ -347,7 +343,6 @@ std::vector<std::string> Encoder::bpe(std::wstring token){
         word.push_back(wstring_to_utf8(w));
     }
     if(token.size() < cache_word_max_length && cache.size() < cache_max_size) cache.insert( {token, word} );
-    std::cout << "bpe ok\n";
     return word;
 };
 std::vector<std::string> Encoder::tokenize(std::string str){
@@ -357,19 +352,14 @@ std::vector<std::string> Encoder::tokenize(std::string str){
     std::wsregex_iterator iter(wstr.begin(), wstr.end(), pat);
     std::wsregex_iterator end;
     while(iter != end){
-        std::cout << "regex: '" << wstring_to_utf8(iter->str()) << "'\n";
         std::wstring token;
         for(char c: wstring_to_utf8(iter->str())){
             if(0 > c) token.push_back(*(bytes_encoder + c + 256));
             else token.push_back(*(bytes_encoder + c));
         }
-        std::cout << "token " << wstring_to_utf8(token) << "\n";
         decltype(bpe_tokens) curr_bpe_tokens = bpe(token);
         bpe_tokens.insert(bpe_tokens.end(), curr_bpe_tokens.begin(), curr_bpe_tokens.end());
         ++iter;
-    }
-    for(auto t: bpe_tokens){
-        std::cout << t <<"\n";
     }
     return bpe_tokens;
 }
@@ -389,11 +379,9 @@ void Encoder::padding_encode_single_with_special_tokens(std::string str, size_t 
     if(not mask_ids->empty() ) mask_ids->clear();
     input_ids->reserve(max_length);
     mask_ids->reserve(max_length);
-    std::cout << "step 1\n";
     input_ids->push_back(vocab[bos_token]);
     mask_ids->push_back(1);
     auto tokens = tokenize(str);
-    std::cout << "step 2\n";
     for(auto t:tokens){
         if(input_ids->size() == max_length-1) break;
         input_ids->push_back(convert_token_to_id(t));
