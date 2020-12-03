@@ -1,3 +1,8 @@
+// version 0.1
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>.
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2019-2020 zili wang <wzlnot@gmail.com>.
+
 #include <string>
 #include <stdint.h>
 #include <fstream>
@@ -393,40 +398,4 @@ void Encoder::padding_encode_single_with_special_tokens(std::string str, size_t 
         input_ids->push_back(vocab[pad_token]);
         mask_ids->push_back(0);
     }
-}
-
-
-
-int main(){
-    Encoder test("/home/wangzl/WD/SimilarTextSug/pretrained/roberta-base-es/vocab.json", "/home/wangzl/WD/SimilarTextSug/pretrained/roberta-base-es/merges.txt");
-    std::vector<int64_t> input_ids;
-    std::vector<int64_t> mask_ids;
-    std::cout << "init ok\n";
-    test.padding_encode_single_with_special_tokens("this is   a test example!!!", 10, &input_ids, &mask_ids);
-    for(auto i: input_ids){
-        std::cout << i << " ";
-    }
-    std::cout << "\n-----\n";
-    for(auto i: mask_ids){
-        std::cout << i << " ";
-    }
-    std::cout << "\n";
-    test.padding_encode_single_with_special_tokens("Tribunal Supremo tendrá a los prisión", 10, &input_ids, &mask_ids);
-    for(auto i: input_ids){
-        std::cout << i << " ";
-    }
-    std::cout << "\n-----\n";
-    for(auto i: mask_ids){
-        std::cout << i << " ";
-    }
-    std::cout << "\n";
-    test.padding_encode_single_with_special_tokens("assé .. sss 哈練ウ페 يَّةُ ру́сский", 10, &input_ids, &mask_ids);
-    for(auto i: input_ids){
-        std::cout << i << " ";
-    }
-    std::cout << "\n-----\n";
-    for(auto i: mask_ids){
-        std::cout << i << " ";
-    }
-    std::cout << "\n";
 }
