@@ -1,9 +1,10 @@
 ### The GPT tokenizer only for deploy
 The c++ version of gpt tokenizer base on https://github.com/huggingface/transformers.
+
 Support:
-    - tokenize
-    - convert_token_to_id
-    - padding_encode_single_with_special_tokens: encode a single string with padding mode
+ - tokenize
+ - convert_token_to_id
+ - padding_encode_single_with_special_tokens: encode a single string with padding mode
 
 ### exmaple
 ```c++
